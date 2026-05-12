@@ -11,7 +11,7 @@ TeamPCP / Mini Shai-Hulud npm supply chain attack (May 11-12 2026).
 
 ## Requirements
 - Python 3.6 or higher
-- No pip installs needed — standard library only
+- No pip installs needed - standard library only
 - Works on Windows, Mac, Linux
 
 ## Usage
