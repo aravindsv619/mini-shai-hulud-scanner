@@ -24,10 +24,10 @@ AWS credentials and CI/CD secrets.
 | check.ps1 | PowerShell version — Windows only, no Python needed |
 
 ## Requirements
-- check.py  — Python 3.6+, no pip installs needed
-- check.ps1 — PowerShell (built into Windows, no install needed)
+- check.py  - Python 3.6+, no pip installs needed
+- check.ps1 - PowerShell (built into Windows, no install needed)
 
-## Usage — Python
+## Usage - Python
 ```bash
 # Scan current folder
 python check.py
@@ -42,7 +42,7 @@ python check.py C:\Users\you\Downloads\my-repo
 python check.py /path/to/repo > results.txt
 ```
 
-## Usage — PowerShell (Windows, no Python needed)
+## Usage - PowerShell (Windows, no Python needed)
 ```powershell
 # Scan specific folder
 powershell -ExecutionPolicy Bypass -File check.ps1 -RepoPath "C:\Users\you\Downloads\my-repo"
@@ -50,12 +50,12 @@ powershell -ExecutionPolicy Bypass -File check.ps1 -RepoPath "C:\Users\you\Downl
 
 ## Output
 
-CLEAN  — No action required. Safe to report as unaffected.
-AFFECTED — See IR steps below immediately.
+CLEAN  - No action required. Safe to report as unaffected.
+AFFECTED - See IR steps below immediately.
 
 Report saved automatically as triage_results.txt in scanned folder.
 
-## If AFFECTED — immediate actions in this order
+## If AFFECTED - immediate actions in this order
 1. Remove gh-token-monitor daemon BEFORE revoking any tokens
 2. Delete payload files from .claude/ and .vscode/
 3. Rotate GitHub tokens, npm tokens, AWS/GCP creds, CI/CD secrets
