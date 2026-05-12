@@ -14,14 +14,14 @@ AWS credentials and CI/CD secrets.
 - All 169 compromised npm packages and exact bad versions
 - package-lock.json, yarn.lock, pnpm-lock.yaml
 - Malicious payload files (router_init.js, tanstack_runner.js)
-- IOC strings — C2 domains, orphan commit hash, worm markers
+- IOC strings - C2 domains, orphan commit hash, worm markers
 - Saves a triage_results.txt report automatically
 
 ## Files
 | File | Description |
 |---|---|
-| check.py | Python version — Mac, Linux, Windows |
-| check.ps1 | PowerShell version — Windows only, no Python needed |
+| check.py | Python version - Mac, Linux, Windows |
+| check.ps1 | PowerShell version - Windows only, no Python needed |
 
 ## Requirements
 - check.py  - Python 3.6+, no pip installs needed
