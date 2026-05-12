@@ -1,7 +1,7 @@
 # Mini Shai-Hulud Scanner
 
 A defensive SecOps tool to check if a repository is affected
-by the TeamPCP / Mini Shai-Hulud npm supply chain attack
+Mini Shai-Hulud npm supply chain attack
 (May 11-12 2026).
 
 ## What is Mini Shai-Hulud
