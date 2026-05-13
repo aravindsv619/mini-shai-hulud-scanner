@@ -21,7 +21,6 @@ The malware steals GitHub tokens, npm tokens, AWS credentials, CI/CD secrets, an
 | check.py | Python scanner - works on Mac, Linux, Windows |
 | check.ps1 | PowerShell scanner - Windows only, no Python needed |
 | README.md | This file |
-| developer_checklist.docx | Instructions document to share with developers |
 
 ---
 
