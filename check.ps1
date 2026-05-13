@@ -1,6 +1,6 @@
 # =============================================================================
-# Mini Shai-Hulud / TeamPCP — Supply Chain Scanner v3.0 (PowerShell)
-# Updated: May 13 2026 — Sources: Wiz + Aikido + StepSecurity
+# Mini Shai-Hulud / TeamPCP  -  Supply Chain Scanner v3.0 (PowerShell)
+# Updated: May 13 2026  -  Sources: Wiz + Aikido + StepSecurity
 # =============================================================================
 # No Python needed. Runs on any Windows machine.
 #
@@ -364,7 +364,7 @@ if (-not $lockfiles) {
             }
         }
 
-        # ── yarn.lock / pnpm-lock.yaml — text search ──────────────────────────
+        # ── yarn.lock / pnpm-lock.yaml  -  text search ──────────────────────────
         if ($lf.Name -in @("yarn.lock","pnpm-lock.yaml")) {
             $content = Get-Content $lf.FullName -Raw -ErrorAction SilentlyContinue
             foreach ($pkg in $AFFECTED.Keys) {
@@ -557,7 +557,7 @@ foreach ($pf in $PERSISTENCE_FILES) {
         }
         if ($pf -like "*.github/workflows/codeql_analysis.yml") { $suspicious = $true; $reasons += "unexpected codeql workflow" }
         if ($suspicious) {
-            Write-Host "  [CRITICAL] Suspicious: $pf — contains: $($reasons -join ', ')" -ForegroundColor Red
+            Write-Host "  [CRITICAL] Suspicious: $pf  -  contains: $($reasons -join ', ')" -ForegroundColor Red
             $persistSuspicious += $pf
         } else {
             Write-Host "  [INFO] Exists (review manually): $pf" -ForegroundColor Yellow
@@ -568,35 +568,27 @@ if ($persistSuspicious.Count -eq 0) { Write-Host "  No suspicious persistence fi
 
 # =============================================================================
 $reportPath = Join-Path $RepoPath "triage_results.txt"
-$report = @"
-Mini Shai-Hulud / TeamPCP -- Triage Report
-============================================================
-Date              : $timestamp
-Folder scanned    : $RepoPath
-Overall status    : $overall
-
-Lockfiles found   : $($lockfilesFound.Count)
-Packages checked  : $($AFFECTED.Count)
-Confirmed hits    : $($confirmedHits.Count)
-Safe versions     : $($safeVersions.Count)
-Payload files     : $($payloadCritical.Count)
-IOC string hits   : $($iocHits.Count)
-
-CONFIRMED PACKAGE HITS:
-$(if ($confirmedHits.Count -eq 0) { "None" } else { ($confirmedHits | ForEach-Object { "  $($_.Package)@$($_.Version) -- $($_.File)" }) -join "`n" })
-
-SAFE VERSIONS (package present, not bad version):
-$(if ($safeVersions.Count -eq 0) { "None" } else { ($safeVersions | ForEach-Object { "  $($_.Package)@$($_.Version) -- $($_.File)" }) -join "`n" })
-
-PAYLOAD FILES FOUND:
-$(if ($payloadCritical.Count -eq 0) { "None" } else { ($payloadCritical | ForEach-Object { "  $_" }) -join "`n" })
-
-IOC STRINGS FOUND:
-$(if ($iocHits.Count -eq 0) { "None" } else { ($iocHits | ForEach-Object { "  '$($_.IOC)' in $($_.File)" }) -join "`n" })
-
-Ref: https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised
-"@
-
+$pkgHits  = if ($confirmedHits.Count -eq 0)  { "None" } else { ($confirmedHits  | ForEach-Object { "  " + $_.Package + $at + $_.Version + " -- " + $_.File }) -join [System.Environment]::NewLine }
+$safeVers = if ($safeVersions.Count -eq 0)   { "None" } else { ($safeVersions   | ForEach-Object { "  " + $_.Package + $at + $_.Version + " -- " + $_.File }) -join [System.Environment]::NewLine }
+$payFiles = if ($payloadCritical.Count -eq 0) { "None" } else { ($payloadCritical | ForEach-Object { "  " + $_ }) -join [System.Environment]::NewLine }
+$iocFound = if ($iocHits.Count -eq 0)        { "None" } else { ($iocHits | ForEach-Object { "  " + [char]39 + $_.IOC + [char]39 + " in " + $_.File }) -join [System.Environment]::NewLine }
+$nl = [System.Environment]::NewLine
+$report  = "Mini Shai-Hulud / TeamPCP -- Triage Report" + $nl
+$report += "============================================================" + $nl
+$report += "Date              : $timestamp" + $nl
+$report += "Folder scanned    : $RepoPath" + $nl
+$report += "Overall status    : $overall" + $nl + $nl
+$report += "Lockfiles found   : $($lockfilesFound.Count)" + $nl
+$report += "Packages checked  : $($AFFECTED.Count)" + $nl
+$report += "Confirmed hits    : $($confirmedHits.Count)" + $nl
+$report += "Safe versions     : $($safeVersions.Count)" + $nl
+$report += "Payload files     : $($payloadCritical.Count)" + $nl
+$report += "IOC string hits   : $($iocHits.Count)" + $nl + $nl
+$report += "CONFIRMED PACKAGE HITS:" + $nl + $pkgHits + $nl + $nl
+$report += "SAFE VERSIONS (package present, not bad version):" + $nl + $safeVers + $nl + $nl
+$report += "PAYLOAD FILES FOUND:" + $nl + $payFiles + $nl + $nl
+$report += "IOC STRINGS FOUND:" + $nl + $iocFound + $nl + $nl
+$report += "Ref: https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised"
 $report | Out-File -FilePath $reportPath -Encoding UTF8
 Write-Host "  Report saved to: $reportPath"
 Write-Host ""
