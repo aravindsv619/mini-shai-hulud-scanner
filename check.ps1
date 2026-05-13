@@ -323,9 +323,9 @@ function Should-Skip($path) {
     return $false
 }
 
-function Write-Tick($msg)  { Write-Host "  " -NoNewline; Write-Host "✓" -ForegroundColor Green -NoNewline; Write-Host "  $msg" }
-function Write-Cross($msg) { Write-Host "  " -NoNewline; Write-Host "✗" -ForegroundColor Red   -NoNewline; Write-Host "  $msg" }
-function Write-Warn($msg)  { Write-Host "  " -NoNewline; Write-Host "!" -ForegroundColor Yellow -NoNewline; Write-Host "  $msg" }
+function Write-Tick($msg)  { Write-Host "  " -NoNewline; Write-Host "[OK]" -ForegroundColor Green -NoNewline; Write-Host "  $msg" }
+function Write-Cross($msg) { Write-Host "  " -NoNewline; Write-Host "[!!]" -ForegroundColor Red   -NoNewline; Write-Host "  $msg" }
+function Write-Warn($msg)  { Write-Host "  " -NoNewline; Write-Host "[!]" -ForegroundColor Yellow -NoNewline; Write-Host "  $msg" }
 function Write-Info($msg)  { Write-Host "     $msg" }
 function Write-Blank()     { Write-Host "" }
 
@@ -333,7 +333,7 @@ function Write-Blank()     { Write-Host "" }
 # SCANNERS  -  equivalent to Python functions
 # =============================================================================
 
-# ── scan_npm_lock  ─────────────────────────────────────────────────────────────
+# -- scan_npm_lock  -------------------------------------------------------------
 function Scan-NpmLock($path) {
     $results  = @()
     $rel      = Get-RelPath $path
@@ -408,7 +408,7 @@ function Scan-NpmLock($path) {
     return $results
 }
 
-# ── scan_yarn  ────────────────────────────────────────────────────────────────
+# -- scan_yarn  ----------------------------------------------------------------
 function Scan-Yarn($path) {
     $results = @()
     $rel     = Get-RelPath $path
@@ -434,7 +434,7 @@ function Scan-Yarn($path) {
     return $results
 }
 
-# ── scan_pnpm  ────────────────────────────────────────────────────────────────
+# -- scan_pnpm  ----------------------------------------------------------------
 function Scan-Pnpm($path) {
     $results = @()
     $rel     = Get-RelPath $path
@@ -463,7 +463,7 @@ function Scan-Pnpm($path) {
     return $results
 }
 
-# ── scan_pypi  ────────────────────────────────────────────────────────────────
+# -- scan_pypi  ----------------------------------------------------------------
 function Scan-Pypi($path) {
     $results = @()
     $rel     = Get-RelPath $path
@@ -488,7 +488,7 @@ function Scan-Pypi($path) {
     return $results
 }
 
-# ── scan_payloads  ────────────────────────────────────────────────────────────
+# -- scan_payloads  ------------------------------------------------------------
 function Scan-Payloads($root) {
     $found = @()
     Get-ChildItem -Path $root -Recurse -File -ErrorAction SilentlyContinue |
@@ -507,7 +507,7 @@ function Scan-Payloads($root) {
     return $found
 }
 
-# ── scan_persistence  ────────────────────────────────────────────────────────
+# -- scan_persistence  --------------------------------------------------------
 function Scan-Persistence($root) {
     $found   = @()
     $checks  = @("router_runtime","tanstack_runner","setup.mjs","gh-token-monitor",
@@ -531,7 +531,7 @@ function Scan-Persistence($root) {
     return $found
 }
 
-# ── scan_iocs  ────────────────────────────────────────────────────────────────
+# -- scan_iocs  ----------------------------------------------------------------
 function Scan-Iocs($root) {
     $found = @()
     Get-ChildItem -Path $root -Recurse -File -ErrorAction SilentlyContinue |
@@ -559,7 +559,7 @@ function Scan-Iocs($root) {
 # MAIN  -  same flow as Python main()
 # =============================================================================
 
-# ── Header  ───────────────────────────────────────────────────────────────────
+# -- Header  -------------------------------------------------------------------
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "  Mini Shai-Hulud Supply Chain Attack Scanner v4.0" -ForegroundColor Cyan
@@ -595,7 +595,7 @@ Get-ChildItem -Path $RepoPath -Recurse -File -ErrorAction SilentlyContinue |
         (-not (Should-Skip $_.FullName))
     } | ForEach-Object { $reqFiles += $_.FullName }
 
-# ── STEP 1: Lockfiles  ────────────────────────────────────────────────────────
+# -- STEP 1: Lockfiles  --------------------------------------------------------
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "  STEP 1 of 5 - Checking package files (lockfiles)" -ForegroundColor Cyan
@@ -644,7 +644,7 @@ if ($safes.Count -gt 0) {
     foreach ($r in $safes) { Write-Info "  $($r.Pkg)  version $($r.Ver)  <- this version is OK" }
 }
 
-# ── STEP 2: Payload files  ────────────────────────────────────────────────────
+# -- STEP 2: Payload files  ----------------------------------------------------
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "  STEP 2 of 5 - Checking for malware files" -ForegroundColor Cyan
@@ -676,7 +676,7 @@ if ($inNm.Count -gt 0) {
     foreach ($p in $inNm) { Write-Info "  $($p.Rel)" }
 }
 
-# ── STEP 3: Persistence files  ───────────────────────────────────────────────
+# -- STEP 3: Persistence files  -----------------------------------------------
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "  STEP 3 of 5 - Checking for hidden backdoors" -ForegroundColor Cyan
@@ -707,7 +707,7 @@ if ($pInfo.Count -gt 0) {
     foreach ($p in $pInfo) { Write-Info "  $($p.File)" }
 }
 
-# ── STEP 4: IOC strings  ─────────────────────────────────────────────────────
+# -- STEP 4: IOC strings  -----------------------------------------------------
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "  STEP 4 of 5 - Checking for attack fingerprints" -ForegroundColor Cyan
@@ -763,7 +763,7 @@ if ($iocGroups.Count -gt 0) {
     Write-Tick "No attack fingerprints found in source files"
 }
 
-# ── STEP 5: Final result  ─────────────────────────────────────────────────────
+# -- STEP 5: Final result  -----------------------------------------------------
 $total   = $hits.Count + $crit.Count + $pHits.Count + $iocGroups.Count
 $overall = if ($total -gt 0) { "AFFECTED" } else { "CLEAN" }
 $col     = if ($total -gt 0) { "Red" } else { "Green" }
@@ -779,12 +779,12 @@ function Write-Score($label, $count) {
     $padded = $label.PadRight(35)
     if ($count -eq 0) {
         Write-Host "  " -NoNewline
-        Write-Host "✓" -ForegroundColor Green -NoNewline
+        Write-Host "[OK]" -ForegroundColor Green -NoNewline
         Write-Host "  $padded " -NoNewline
         Write-Host "None found" -ForegroundColor Green
     } else {
         Write-Host "  " -NoNewline
-        Write-Host "✗" -ForegroundColor Red -NoNewline
+        Write-Host "[!!]" -ForegroundColor Red   -NoNewline
         Write-Host "  $padded " -NoNewline
         Write-Host "$count found" -ForegroundColor Red
     }
@@ -853,7 +853,7 @@ if ($total -gt 0) {
     Write-Host "  This repo does not appear to be affected by the attack."
 }
 
-# ── Full scan summary table  ──────────────────────────────────────────────────
+# -- Full scan summary table  --------------------------------------------------
 Write-Blank
 Write-Host "  " -NoNewline; Write-Host ("-" * 61)
 Write-Host "    FULL SCAN SUMMARY"
@@ -914,52 +914,79 @@ Write-Host "  Advisory references:"
 Write-Host "  Wiz     : https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised"
 Write-Host "  StepSec : https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem"
 
-# ── Save report  ──────────────────────────────────────────────────────────────
+# -- Save report  --------------------------------------------------------------
 $reportPath = Join-Path $RepoPath "triage_results.txt"
-$report = @"
-=================================================================
-MINI SHAI-HULUD SUPPLY CHAIN ATTACK - TRIAGE REPORT v4.0
-=================================================================
-Scan date   : $timestamp
-Repository  : $repoName
-Full path   : $RepoPath
-Result      : $overall
-
------------------------------------------------------------------
-SCAN STATISTICS
------------------------------------------------------------------
-npm lockfiles found    : $($lockfiles.Count)
-PyPI req files found   : $($reqFiles.Count)
-npm packages checked   : $($AFFECTED.Count)
-PyPI packages checked  : $($AFFECTED_PYPI.Count)
-Attack signatures      : $($IOC_STRINGS.Count)
-Infected versions hit  : $($hits.Count)
-Malware files hit      : $($crit.Count)
-Backdoor files hit     : $($pHits.Count)
-IOC fingerprint hits   : $($iocGroups.Count)
-
------------------------------------------------------------------
-INFECTED PACKAGE VERSIONS
------------------------------------------------------------------
-$(if ($hits.Count -eq 0) { "None found" } else { ($hits | ForEach-Object { "  INFECTED : $($_.Pkg)  version $($_.Ver)`n  Found in : $($_.File)`n  Bad vers : $($_.Bad)`n" }) -join "" })
------------------------------------------------------------------
-MALWARE FILES
------------------------------------------------------------------
-$(if ($crit.Count -eq 0) { "None found" } else { ($crit | ForEach-Object { "  FILE   : $($_.Rel)`n  HASH   : $($_.Hash)`n  STATUS : $(if($_.HashMatch){'CONFIRMED MALICIOUS (hash match)'}else{'Suspicious - outside node_modules'})`n" }) -join "" })
------------------------------------------------------------------
-BACKDOOR FILES
------------------------------------------------------------------
-$(if ($pHits.Count -eq 0) { "None found" } else { ($pHits | ForEach-Object { "  FILE     : $($_.File)`n  CONTAINS : $($_.Reasons -join ', ')`n" }) -join "" })
------------------------------------------------------------------
-ATTACK FINGERPRINTS
------------------------------------------------------------------
-$(if ($iocHits.Count -eq 0) { "None found" } else { ($iocHits | ForEach-Object { "  '$($_.IOC)'`n  Found in: $($_.File)`n" }) -join "" })
------------------------------------------------------------------
-REFERENCES
------------------------------------------------------------------
-Wiz     : https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised
-StepSec : https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem
-"@
+# Build report line by line - avoids here-string dash operator issues
+$reportLines = @()
+$reportLines += "================================================================="
+$reportLines += "MINI SHAI-HULUD SUPPLY CHAIN ATTACK - TRIAGE REPORT v4.0"
+$reportLines += "================================================================="
+$reportLines += "Scan date   : $timestamp"
+$reportLines += "Repository  : $repoName"
+$reportLines += "Full path   : $RepoPath"
+$reportLines += "Result      : $overall"
+$reportLines += ""
+$reportLines += "SCAN STATISTICS"
+$reportLines += "npm lockfiles found    : $($lockfiles.Count)"
+$reportLines += "PyPI req files found   : $($reqFiles.Count)"
+$reportLines += "npm packages checked   : $($AFFECTED.Count)"
+$reportLines += "PyPI packages checked  : $($AFFECTED_PYPI.Count)"
+$reportLines += "Attack signatures      : $($IOC_STRINGS.Count)"
+$reportLines += "Infected versions hit  : $($hits.Count)"
+$reportLines += "Malware files hit      : $($crit.Count)"
+$reportLines += "Backdoor files hit     : $($pHits.Count)"
+$reportLines += "IOC fingerprint hits   : $($iocGroups.Count)"
+$reportLines += ""
+$reportLines += "INFECTED PACKAGE VERSIONS"
+if ($hits.Count -eq 0) {
+    $reportLines += "  None found"
+} else {
+    foreach ($r in $hits) {
+        $reportLines += "  INFECTED : $($r.Pkg)  version $($r.Ver)"
+        $reportLines += "  Found in : $($r.File)"
+        $reportLines += "  Bad vers : $($r.Bad)"
+        $reportLines += ""
+    }
+}
+$reportLines += ""
+$reportLines += "MALWARE FILES"
+if ($crit.Count -eq 0) {
+    $reportLines += "  None found"
+} else {
+    foreach ($p in $crit) {
+        $reportLines += "  FILE   : $($p.Rel)"
+        $reportLines += "  HASH   : $($p.Hash)"
+        $reportLines += "  STATUS : $(if($p.HashMatch){'CONFIRMED MALICIOUS (hash match)'}else{'Suspicious - outside node_modules'})"
+        $reportLines += ""
+    }
+}
+$reportLines += ""
+$reportLines += "BACKDOOR FILES"
+if ($pHits.Count -eq 0) {
+    $reportLines += "  None found"
+} else {
+    foreach ($p in $pHits) {
+        $reportLines += "  FILE     : $($p.File)"
+        $reportLines += "  CONTAINS : $($p.Reasons -join ', ')"
+        $reportLines += ""
+    }
+}
+$reportLines += ""
+$reportLines += "ATTACK FINGERPRINTS"
+if ($iocHits.Count -eq 0) {
+    $reportLines += "  None found"
+} else {
+    foreach ($h in $iocHits) {
+        $reportLines += "  IOC      : $($h.IOC)"
+        $reportLines += "  Found in : $($h.File)"
+        $reportLines += ""
+    }
+}
+$reportLines += ""
+$reportLines += "REFERENCES"
+$reportLines += "Wiz     : https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised"
+$reportLines += "StepSec : https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem"
+$report = $reportLines -join "`n"
 
 $report | Out-File -FilePath $reportPath -Encoding UTF8
 Write-Blank
