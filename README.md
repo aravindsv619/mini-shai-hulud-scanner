@@ -2,7 +2,7 @@
 
 A defensive security tool to check if a code repository is affected by the **TeamPCP / Mini Shai-Hulud** npm supply chain attack (May 11–12 2026).
 
-Output is written in plain English so anyone — technical or non-technical — can understand the results immediately.
+Output is written in plain English so anyone - technical or non-technical - can understand the results immediately.
 
 > **This tool is read-only. It never deletes, modifies, or connects to anything. It only reads files and reports what it finds.**
 
@@ -27,8 +27,8 @@ If a developer ran `npm install` while one of the infected versions was in their
 
 | Action | Does it happen? |
 |---|---|
-| Read files to check for threats | ✓ Yes — read only |
-| Save a `triage_results.txt` report | ✓ Yes — one new file |
+| Read files to check for threats | ✓ Yes - read only |
+| Save a `triage_results.txt` report | ✓ Yes - one new file |
 | Delete any files | ✗ Never |
 | Modify any files | ✗ Never |
 | Connect to the internet | ✗ Never |
@@ -40,7 +40,7 @@ If a developer ran `npm install` while one of the infected versions was in their
 
 ## What This Tool Checks
 
-### Step 1 — Package version check
+### Step 1 - Package version check
 Scans `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, and `requirements*.txt` for all **180 infected packages** across **17 namespaces**:
 
 | Namespace | Packages checked |
@@ -65,7 +65,7 @@ Scans `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, and `requirements*.txt
 | PyPI (`guardrails-ai`, `mistralai`) | 2 |
 | **Total** | **180** |
 
-### Step 2 — Malware file check
+### Step 2 - Malware file check
 Looks for payload files dropped by the malware, with SHA256 hash verification:
 
 | File | SHA256 |
@@ -77,47 +77,47 @@ Looks for payload files dropped by the malware, with SHA256 hash verification:
 | `router_runtime.js` | detected by filename |
 | `opensearch_init.js` | detected by filename |
 
-### Step 3 — Backdoor / persistence check
+### Step 3 - Backdoor / persistence check
 Checks IDE and CI/CD config files used by the malware to re-run itself:
 
 | File | Risk |
 |---|---|
-| `.claude/settings.json` | SessionStart hook — re-runs malware every Claude Code open |
+| `.claude/settings.json` | SessionStart hook - re-runs malware every Claude Code open |
 | `.claude/router_runtime.js` | Malware payload in editor config |
 | `.claude/setup.mjs` | Malware setup script in editor config |
-| `.vscode/tasks.json` | folderOpen task — re-runs malware every VS Code open |
+| `.vscode/tasks.json` | folderOpen task - re-runs malware every VS Code open |
 | `.vscode/setup.mjs` | Malware setup script in editor config |
 | `.github/workflows/codeql_analysis.yml` | Exfiltrates ALL repository secrets on every push |
 
-### Step 4 — Attack fingerprint check
+### Step 4 - Attack fingerprint check
 Scans all source files for **32 known IOC strings**:
 
 **C2 network infrastructure:**
-- `api.masscan.cloud` — attacker C2 server
-- `git-tanstack.com` — attacker C2 domain
-- `filev2.getsession.org` — attacker file server
-- `seed1.getsession.org` — Session messenger C2 node
-- `83.142.209.194` — attacker C2 IP address
+- `api.masscan.cloud` - attacker C2 server
+- `git-tanstack.com` - attacker C2 domain
+- `filev2.getsession.org` - attacker file server
+- `seed1.getsession.org` - Session messenger C2 node
+- `83.142.209.194` - attacker C2 IP address
 
 **Credential theft endpoints:**
-- `169.254.169.254` — AWS EC2 metadata (IAM credential theft)
-- `169.254.170.2` — ECS/Fargate metadata credential theft
-- `registry.npmjs.org/-/npm/v1/tokens` — npm token theft
-- `vault.svc.cluster.local` / `127.0.0.1:8200` — HashiCorp Vault theft
+- `169.254.169.254` - AWS EC2 metadata (IAM credential theft)
+- `169.254.170.2` - ECS/Fargate metadata credential theft
+- `registry.npmjs.org/-/npm/v1/tokens` - npm token theft
+- `vault.svc.cluster.local` / `127.0.0.1:8200` - HashiCorp Vault theft
 
 **Campaign signatures:**
-- `79ac49eedf774dd4b0cfa308722bc463cfe5885c` — malicious orphan commit hash
-- `A Mini Shai-Hulud` — campaign marker
-- `IfYouRevokeThisTokenItWillWipeTheComputerOfTheOwner` — wiper threat token description
-- `rm -rf ~/` — destructive wiper command
-- `gh-token-monitor` — persistence daemon name
-- `voicproducoes` — attacker GitHub account
-- `claude@users.noreply.github.com` — dead-drop commit author
-- `chore: update dependencies` — dead-drop commit message disguise
-- `dependabot/github_actions/format/` — dead-drop branch pattern
-- `0c0e873033875f1bc471eda37e3b9d0f9b89bd41a4bbb4f86746caa2176c40aa` — campaign cipher key
-- `svksjrhjkcejg` — campaign PBKDF2 salt
-- `siridar-ghola-567` / `tleilaxu-ornithopter-43` — worm marker repository names
+- `79ac49eedf774dd4b0cfa308722bc463cfe5885c` - malicious orphan commit hash
+- `A Mini Shai-Hulud` - campaign marker
+- `IfYouRevokeThisTokenItWillWipeTheComputerOfTheOwner` - wiper threat token description
+- `rm -rf ~/` - destructive wiper command
+- `gh-token-monitor` - persistence daemon name
+- `voicproducoes` - attacker GitHub account
+- `claude@users.noreply.github.com` - dead-drop commit author
+- `chore: update dependencies` - dead-drop commit message disguise
+- `dependabot/github_actions/format/` - dead-drop branch pattern
+- `0c0e873033875f1bc471eda37e3b9d0f9b89bd41a4bbb4f86746caa2176c40aa` - campaign cipher key
+- `svksjrhjkcejg` - campaign PBKDF2 salt
+- `siridar-ghola-567` / `tleilaxu-ornithopter-43` - worm marker repository names
 
 ---
 
@@ -125,8 +125,8 @@ Scans all source files for **32 known IOC strings**:
 
 | File | Description |
 |---|---|
-| `check.py` | Python scanner — Mac, Linux, Windows |
-| `check.ps1` | PowerShell scanner — Windows only, no Python needed |
+| `check.py` | Python scanner - Mac, Linux, Windows |
+| `check.ps1` | PowerShell scanner - Windows only, no Python needed |
 | `README.md` | This file |
 
 ---
@@ -135,7 +135,7 @@ Scans all source files for **32 known IOC strings**:
 
 **check.py:**
 - Python 3.6 or higher
-- No pip installs needed — standard library only
+- No pip installs needed - standard library only
 - Works on Windows, Mac, Linux
 
 **check.ps1:**
@@ -147,12 +147,12 @@ Scans all source files for **32 known IOC strings**:
 
 ## Usage
 
-**Python — scan current folder** (run from inside your repo):
+**Python - scan current folder** (run from inside your repo):
 ```bash
 python check.py
 ```
 
-**Python — scan a specific folder:**
+**Python - scan a specific folder:**
 ```bash
 # Mac / Linux
 python3 check.py /path/to/your/repo
@@ -161,19 +161,19 @@ python3 check.py /path/to/your/repo
 python check.py C:\Users\you\Downloads\my-repo
 ```
 
-**Python — scan multiple repos:**
+**Python - scan multiple repos:**
 ```bash
 python check.py C:\repos\frontend
 python check.py C:\repos\backend
 python check.py C:\repos\dashboard
 ```
 
-**Python — save output to a file:**
+**Python - save output to a file:**
 ```bash
 python check.py /path/to/repo > results.txt
 ```
 
-**PowerShell — Windows (no Python needed):**
+**PowerShell - Windows (no Python needed):**
 ```powershell
 powershell -ExecutionPolicy Bypass -File check.ps1 -RepoPath "C:\Users\you\Downloads\my-repo"
 ```
@@ -230,25 +230,25 @@ The tool runs 5 checks and shows a full summary table at the end.
   RESULT: THIS REPOSITORY IS AFFECTED
 =================================================================
 
-  WHAT TO DO — IN THIS EXACT ORDER:
-  STEP A — Remove malware daemon FIRST (before touching any passwords)
-  STEP B — Remove hidden backdoor files
-  STEP C — Change all passwords and tokens
-  STEP D — Block attacker servers at firewall/DNS
-  STEP E — Check for cryptocurrency wallets
+  WHAT TO DO - IN THIS EXACT ORDER:
+  STEP A - Remove malware daemon FIRST (before touching any passwords)
+  STEP B - Remove hidden backdoor files
+  STEP C - Change all passwords and tokens
+  STEP D - Block attacker servers at firewall/DNS
+  STEP E - Check for cryptocurrency wallets
 ```
 
 A full report is automatically saved to `triage_results.txt` in the scanned folder.
 
 ---
 
-## If You Find a Hit — Critical Warning
+## If You Find a Hit - Critical Warning
 
 > ⚠️ **DO NOT revoke GitHub tokens or change any passwords until you have removed the malware daemon first.**
 >
 > The malware runs `rm -rf ~/` which deletes all files in the home folder when it detects a token being revoked. Remove the daemon first, then rotate credentials.
 
-**Step A — Remove the daemon on Mac:**
+**Step A - Remove the daemon on Mac:**
 ```bash
 launchctl unload ~/Library/LaunchAgents/com.user.gh-token-monitor.plist
 rm -f ~/Library/LaunchAgents/com.user.gh-token-monitor.plist
@@ -256,19 +256,19 @@ rm -f ~/.local/bin/gh-token-monitor.sh
 rm -rf ~/.config/gh-token-monitor
 ```
 
-**Step A — Remove the daemon on Linux:**
+**Step A - Remove the daemon on Linux:**
 ```bash
 systemctl --user stop gh-token-monitor
 systemctl --user disable gh-token-monitor
 rm -f ~/.config/systemd/user/gh-token-monitor.service
 ```
 
-**Step A — Remove the daemon on Windows:**
+**Step A - Remove the daemon on Windows:**
 ```powershell
 Get-ScheduledTask | Where-Object {$_.TaskName -like "*gh-token*"} | Unregister-ScheduledTask -Confirm:$false
 ```
 
-**Step B — Remove backdoor files:**
+**Step B - Remove backdoor files:**
 ```bash
 rm -f .claude/router_runtime.js .claude/setup.mjs
 git diff .claude/settings.json    # restore if modified
@@ -276,7 +276,7 @@ rm -f .vscode/setup.mjs
 git diff .vscode/tasks.json       # restore if modified
 ```
 
-**Step C — Rotate all credentials:**
+**Step C - Rotate all credentials:**
 ```
 GitHub tokens  →  github.com/settings/tokens
 npm tokens     →  npmjs.com/settings/~/tokens
@@ -284,7 +284,7 @@ AWS/cloud keys →  via your cloud provider console
 CI/CD secrets  →  in your pipeline workspace variables
 ```
 
-**Step D — Block attacker infrastructure at firewall/DNS:**
+**Step D - Block attacker infrastructure at firewall/DNS:**
 ```
 api.masscan.cloud
 git-tanstack.com
@@ -292,7 +292,7 @@ git-tanstack.com
 83.142.209.194
 ```
 
-**Step E — Check cryptocurrency wallets:**
+**Step E - Check cryptocurrency wallets:**
 If any developer has crypto wallets on the affected machine, transfer funds to a new wallet immediately.
 
 ---
@@ -309,10 +309,10 @@ If any developer has crypto wallets on the affected machine, transfer funds to a
 
 For **defensive security purposes only.**
 Run only against repositories you own or have explicit permission to scan.
-This tool only reads files — it does not modify, delete, or connect to anything.
+This tool only reads files - it does not modify, delete, or connect to anything.
 
 ---
 
 ## License
 
-MIT — free to use, copy, modify, and share for defensive security purposes.
+MIT - free to use, copy, modify, and share for defensive security purposes.
